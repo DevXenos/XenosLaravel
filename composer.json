@@ -1,0 +1,16 @@
+{
+    "name": "xenos/router",
+    "type": "library",
+    "autoload": {
+        "psr-4": {
+            "Xenos\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "AlphaTech1219",
+            "email": "alphatech.community@gmail.com"
+        }
+    ],
+    "require": {}
+}

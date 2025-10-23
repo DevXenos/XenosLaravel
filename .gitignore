@@ -1,0 +1,26 @@
+# Composer dependencies
+/vendor/
+
+# Composer lock file (optional, usually not committed for libraries)
+composer.lock
+
+# IDE / editor files
+/.idea/
+/*.sublime-project
+/*.sublime-workspace
+*.vscode/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Logs & temp
+/logs/
+/tmp/
+/cache/
+*.log
+
+# PHPUnit coverage / reports
+coverage/
+phpunit.xml
+phpunit.xml.dist
