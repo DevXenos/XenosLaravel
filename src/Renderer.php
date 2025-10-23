@@ -2,10 +2,6 @@
 
 namespace Xenos;
 
-
-/**
- * @internal Only for Router
- */
 class Renderer
 {
 
