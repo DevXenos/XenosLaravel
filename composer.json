@@ -1,5 +1,5 @@
 {
-    "name": "xenosdev/router",
+    "name": "xenosdev/laravel",
     "type": "library",
     "autoload": {
         "psr-4": {
