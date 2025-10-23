@@ -39,7 +39,7 @@ class Renderer
 
 			'/@old\s*\((.+?)\)/' => '<?php echo old($1, \'\') ?>',
 
-			'/@csrf/' => "<input name='_token' value='" . $_SESSION['_token'] . "' hidden>",
+			'/@csrf/' => "<input name='_token' value='" . \Xenos\Session::Get('_token') ?? '' . "' hidden>",
 
 			"/@auth/" => "<?php if(Auth::check()) (function() { \$user = Auth::user(); ?>",
 			"/@endauth/" => "<?php })(); \$user = null; ?>",
@@ -127,7 +127,7 @@ class Renderer
 			$parentFile = $match[1];
 
 			// Preprocess parent BEFORE using it
-			$parentContent = Renderer::preProcessBlade($parentFile);
+			$parentContent = self::preProcessBlade($parentFile);
 
 			// Replace yields with child sections
 			foreach ($sections as $name => $sectionContent) {
@@ -298,5 +298,33 @@ class Renderer
 			echo "Message: $message\n";
 			echo "</pre>";
 		}
+	}
+
+	public static function view(string $file, array $vars = [])
+	{
+		extract($vars);
+		$content  = self::preProcessBlade($file);
+		$sections = self::extractSections($content);
+		$content  = self::removeSectionBlocks($content);
+		$content  = self::renderLayout($content, $sections);
+		$content  = self::replaceErrorBlocks($content);
+
+		// Components renderer
+		// $content = self::renderBladeComponents($content);
+
+		// Remove multiple blank lines
+		// For now lets test if no have this
+		// $content = preg_replace("/(\r?\n){2,}/", "\n", $content);
+
+		$content = self::replaceBladeDirectives($content);
+
+		// 🔹 Replace {{ $var }} with echo
+		$content = self::replaceBladeEchoes($content);
+
+		// Remove any leftover if not compiled yet
+		$content = self::removeLeftOvers($content);
+
+		// 🔹 Evaluate the final compiled PHP
+		self::render($content);
 	}
 }
