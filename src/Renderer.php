@@ -47,7 +47,7 @@ class Renderer
 		];
 	}
 
-	public static function preProcessBlade($file): string
+	private static function preProcessBlade($file): string
 	{
 		$content = file_get_contents($file);
 
@@ -64,12 +64,12 @@ class Renderer
 		return $content;
 	}
 
-	public static function replaceComments($content): array|string|null
+	private static function replaceComments($content): array|string|null
 	{
 		return preg_replace('/\{\{--.*?--\}\}/s', '', $content);
 	}
 
-	public static function replaceErrorBlocks($content): array|string|null
+	private static function replaceErrorBlocks($content): array|string|null
 	{
 		return preg_replace_callback(
 			'/@error\(["\'](.+?)["\']\)(.*?)@enderror/s',
@@ -93,7 +93,7 @@ class Renderer
 		);
 	}
 
-	public static function extractSections(string $content): array
+	private static function extractSections(string $content): array
 	{
 		$sections = [];
 
@@ -112,7 +112,7 @@ class Renderer
 	/**
 	 * Optional helper to remove section blocks from content
 	 */
-	public static function removeSectionBlocks(string $content): string
+	private static function removeSectionBlocks(string $content): string
 	{
 		// Remove both single-line and block sections
 		$content = preg_replace('/@section\s*\(\s*[\'"].+?[\'"]\s*\).*?@endsection/s', '', $content);
@@ -120,7 +120,7 @@ class Renderer
 		return $content;
 	}
 
-	public static function renderLayout($content, $sections = [])
+	private static function renderLayout($content, $sections = [])
 	{
 		// Check if the Blade file extends a parent
 		if (preg_match('/@extends\s*\(\s*[\'"](.+?)[\'"]\s*\)/', $content, $match)) {
@@ -154,14 +154,14 @@ class Renderer
 		return $content;
 	}
 
-	public static function replaceBladeDirectives($content)
+	private static function replaceBladeDirectives($content)
 	{
 		$patterns = self::getPatterns();
 		// return preg_replace(array_keys($patterns), array_values($patterns), $content);
 		return preg_replace(array_keys($patterns), array_values($patterns), $content);
 	}
 
-	public static function replaceBladeEchoes($content)
+	private static function replaceBladeEchoes($content)
 	{
 		return preg_replace_callback('/\{\{\s*(.+?)\s*\}\}/', function ($m) {
 			$expr = trim($m[1]);
@@ -173,7 +173,7 @@ class Renderer
 	/**
 	 * @deprecated This method is deprecated. Use normal Blade includes instead.
 	 */
-	public static function renderBladeComponents(string $content): string
+	private static function renderBladeComponents(string $content): string
 	{
 		if (trigger_error(__METHOD__ . " is deprecated and current on development", E_USER_DEPRECATED))
 			return $content;
@@ -264,7 +264,7 @@ class Renderer
 		);
 	}
 
-	public static function removeLeftOvers(string $content): string
+	private static function removeLeftOvers(string $content): string
 	{
 		// Remove any @yield('something') without fallback
 		$content = preg_replace('/@yield\s*\(\s*[\'"].+?[\'"]\s*\)/', '', $content);
@@ -275,7 +275,7 @@ class Renderer
 		return $content;
 	}
 
-	public static function render(string $content, string $file = 'inline'): void
+	private static function render(string $content, string $file = 'inline'): void
 	{
 
 		$debug = true;
